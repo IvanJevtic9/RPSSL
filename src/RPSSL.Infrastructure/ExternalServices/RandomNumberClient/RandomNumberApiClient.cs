@@ -2,6 +2,8 @@
 using RPSSL.Domain.GameFlow;
 using RPSSL.Application.GameFlow.Shared;
 using RPSSL.Application.Abstractions.Clients;
+using RPSSL.Domain.Abstraction;
+using RPSSL.Domain.Exceptions;
 
 namespace RPSSL.Infrastructure.ExternalServices.RandomNumberClient;
 
@@ -14,14 +16,20 @@ public class RandomNumberApiClient : IRandomNumberApiClient
         _httpClient = httpClient;
     }
 
-    public async Task<ChoiceResponse> GetRandomChoiceAsync()
+    public async Task<Result<ChoiceResponse>> GetRandomChoiceAsync()
     {
-        var response = await _httpClient.GetFromJsonAsync<RandomNumberResponse>("random") ?? throw new InvalidOperationException("Failed to fetch the random number.");
+        try
+        {
+            var response = await _httpClient.GetFromJsonAsync<RandomNumberResponse>("random") ?? throw new InvalidOperationException("Failed to fetch the random number.");
+            var choice = (response.RandomNumber - 1) % 5 + 1;
+            var choiceEnum = (Choice)choice;
+            var choiceName = choiceEnum.ToString().ToLower();
 
-        var choice = (response.RandomNumber - 1) % 5 + 1;
-        var choiceEnum = (Choice)choice;
-        var choiceName = choiceEnum.ToString().ToLower();
-
-        return new ChoiceResponse((int)choiceEnum, choiceName);
+            return new Result<ChoiceResponse>(new ChoiceResponse((int)choiceEnum, choiceName));
+        }
+        catch (Exception ex)
+        {
+            return new Result<ChoiceResponse>(new RandomNumberApiException(ex.Message));
+        }
     }
 }

@@ -17,15 +17,6 @@ internal sealed class PickRandomChoiceHandler : IQueryHandler<PickRandomChoiceQu
 
     public async Task<Result<ChoiceResponse>> Handle(PickRandomChoiceQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var randomChoice = await _client.GetRandomChoiceAsync();
-
-            return new Result<ChoiceResponse>(randomChoice);
-        }
-        catch (Exception ex)
-        {
-            return new Result<ChoiceResponse>(new RandomNumberApiException(ex.Message));
-        }
+        return await _client.GetRandomChoiceAsync();
     }
 }

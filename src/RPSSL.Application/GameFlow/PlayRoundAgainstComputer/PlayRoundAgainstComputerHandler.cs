@@ -24,11 +24,19 @@ internal sealed class PlayRoundAgainstComputerHandler : ICommandHandler<PlayRoun
 
     public async Task<Result<PlayerVsComputerRoundOutcomeResponse>> Handle(PlayRoundAgainstComputerCommand request, CancellationToken cancellationToken)
     {
-        var computerChoice = await _client.GetRandomChoiceAsync();
+        var computerChoiceResult = await _client.GetRandomChoiceAsync();
+
+        if (computerChoiceResult.IsFailure)
+        {
+            return new Result<PlayerVsComputerRoundOutcomeResponse>(computerChoiceResult.Exception);
+        }
 
         var userIdentifier = _httpContextAccessor.HttpContext?.User?.GetUserIdentifier();
 
-        var result = await _gameService.PlayRoundVsComputer((Choice)request.ChoiceId, (Choice)computerChoice.Id, userIdentifier);
+        var result = await _gameService.PlayRoundVsComputer(
+            (Choice)request.ChoiceId,
+            (Choice)computerChoiceResult.Value.Id,
+            userIdentifier);
 
         return new Result<PlayerVsComputerRoundOutcomeResponse>(result);
     }
