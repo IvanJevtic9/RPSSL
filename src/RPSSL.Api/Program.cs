@@ -4,7 +4,10 @@ using RPSSL.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true) 
+    .AddEnvironmentVariables()
+    .Build();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

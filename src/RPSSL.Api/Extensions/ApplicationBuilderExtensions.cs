@@ -13,7 +13,7 @@ internal static class ApplicationBuilderExtensions
 
         using ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        dbContext.Database.Migrate();
+        dbContext.Database.EnsureCreated();
     }
 
     public static void UseCustomExceptionHandler(this IApplicationBuilder app)

@@ -12,7 +12,7 @@ services:
       - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=RPSSLDb;User=sa;Password=2Secure*Password2;
+      - ConnectionStrings__Database=Server=sqlserver,1433;Database=RPSSLDb;User ID=sa;Password=2Secure*Password2;TrustServerCertificate=True;
     depends_on:
       - sqlserver
 
@@ -24,14 +24,8 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
-    networks:
-      - rpssl-network
     volumes:              
       - sqlserver_data:/var/opt/mssql
-
-networks:
-  rpssl-network:
-    driver: bridge
 
 volumes:
   sqlserver_data:
