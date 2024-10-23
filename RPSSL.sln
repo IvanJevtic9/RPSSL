@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPSSL.Infrastructure", "src
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPSSL.Application.UnitTests", "test\RPSSL.Application.UnitTests\RPSSL.Application.UnitTests.csproj", "{F51735E0-6D71-4C13-8807-C7866F074B44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51735E0-6D71-4C13-8807-C7866F074B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51735E0-6D71-4C13-8807-C7866F074B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51735E0-6D71-4C13-8807-C7866F074B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51735E0-6D71-4C13-8807-C7866F074B44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{83198B7F-E5C2-4662-9653-135F19307918} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
 		{CED283AB-D8BF-4039-8DCB-AB75953E0559} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
 		{3AEDA783-3CAB-4896-8C60-702970BEF3DD} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
+		{F51735E0-6D71-4C13-8807-C7866F074B44} = {354E0F02-6533-4B1A-85EE-49B7E36A60D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BBF1443A-5764-42BD-AAB8-699911ED0C25}

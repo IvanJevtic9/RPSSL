@@ -1,7 +1,7 @@
 ﻿using RPSSL.Domain.Exceptions;
 using RPSSL.Domain.Abstraction;
 using RPSSL.Application.GameFlow.Shared;
-using RPSSL.Application.Abstractions.Client;
+using RPSSL.Application.Abstractions.Clients;
 using RPSSL.Application.Abstractions.Messaging;
 
 namespace RPSSL.Application.GameFlow.PickRandomChoice;
@@ -20,6 +20,7 @@ internal sealed class PickRandomChoiceHandler : IQueryHandler<PickRandomChoiceQu
         try
         {
             var randomChoice = await _client.GetRandomChoiceAsync();
+
             return new Result<ChoiceResponse>(randomChoice);
         }
         catch (Exception ex)

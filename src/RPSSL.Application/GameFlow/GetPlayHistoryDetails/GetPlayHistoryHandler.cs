@@ -4,10 +4,11 @@ using RPSSL.Domain.GameFlow;
 using RPSSL.Domain.Abstraction;
 using Microsoft.AspNetCore.Http;
 using RPSSL.Application.Extensions;
-using RPSSL.Application.Abstractions.Data;
-using RPSSL.Application.Abstractions.Messaging;
 using RPSSL.Application.Game.Factories;
 using RPSSL.Application.GameFlow.Shared;
+using RPSSL.Application.Abstractions.Data;
+using RPSSL.Application.Abstractions.Messaging;
+using RPSSL.Domain.Players;
 
 namespace RPSSL.Application.GameFlow.GetPlayHistoryDetails;
 
@@ -26,8 +27,6 @@ internal sealed record GetPlayHistoryHandler : IQueryHandler<GetPlayHistoryQuery
     {
         var userIdentifier = _httpContextAccessor.HttpContext?.User?.GetUserIdentifier();
 
-        using var connection = _sqlConnectionFactory.CreateConnection();
-
         const string sqlQuery = """
             SELECT 
             	gs.Id,
@@ -41,16 +40,16 @@ internal sealed record GetPlayHistoryHandler : IQueryHandler<GetPlayHistoryQuery
             	gr.PlayerOneChoice,
             	gr.PlayerTwoChoice,
             	gr.PlayedDate
-
             FROM 
             	dbo.GameSessions AS gs WITH (NOLOCK)
             	JOIN dbo.GameRounds as gr WITH (NOLOCK)
             	ON gs.Id = gr.GameSessionId
-
             WHERE 
             	PlayerOneId = @UserIdentifier OR
             	PlayerTwoId = @UserIdentifier
             """;
+
+        using var connection = _sqlConnectionFactory.CreateConnection();
 
         var gameSessionDictionary = new Dictionary<Guid, GameSession>();
 
@@ -72,7 +71,6 @@ internal sealed record GetPlayHistoryHandler : IQueryHandler<GetPlayHistoryQuery
             splitOn: "RoundId"
         );
 
-
         var gameSessionsResponse = await MapToResponse(gameSessions, userIdentifier);
 
         return new Result<IReadOnlyList<GameSessionResponse>>(gameSessionsResponse);
@@ -80,13 +78,12 @@ internal sealed record GetPlayHistoryHandler : IQueryHandler<GetPlayHistoryQuery
 
     private async Task<IReadOnlyList<GameSessionResponse>> MapToResponse(IEnumerable<GameSession>? gameSessions, Guid? playerId)
     {
-        var gameSessionsResponse = new List<GameSessionResponse>();
-
         if (gameSessions is null)
         {
-            return gameSessionsResponse;
+            return Array.Empty<GameSessionResponse>();
         }
 
+        var gameSessionsResponse = new List<GameSessionResponse>();
         var playerDictionary = new Dictionary<Guid, PlayerResponse>();
         var username = _httpContextAccessor.HttpContext?.User?.GetUsername();
 
@@ -98,50 +95,23 @@ internal sealed record GetPlayHistoryHandler : IQueryHandler<GetPlayHistoryQuery
                 ? gameSessionState.PlayerTwoId
                 : gameSessionState.PlayerOneId;
 
-            if (!playerDictionary.TryGetValue(otherPlayerId ?? Guid.Empty, out PlayerResponse playerResponse) && otherPlayerId.HasValue)
-            {
-                const string sqlQuery = """
-                    SELECT
-                        Id,
-                        Username,
-                        Email
-                    FROM 
-                        Players
-                    WHERE 
-                        Id = @Id
-                    """;
+            var playerResponse = await GetPlayerResponseAsync(otherPlayerId, playerDictionary);
 
-                using IDbConnection connection = _sqlConnectionFactory.CreateConnection();
-
-                playerResponse = await connection.QuerySingleOrDefaultAsync<PlayerResponse?>(
-                    sqlQuery,
-                    new { Id = otherPlayerId });
-
-                if (playerResponse is not null)
+            var gameRoundResponse = gameSessionState.Rounds
+                .Select(round => new GameRoundResponse
                 {
-                    playerDictionary.Add(playerResponse.Id, playerResponse);
-                }
-            }
+                    GameSessionId = round.GameSessionId,
+                    PlayerOneChoice = round.PlayerOneChoice.ToString().ToLower(),
+                    PlayerTwoChoice = round.PlayerTwoChoice.ToString().ToLower(),
+                    Result = round.Result.ToString(),
+                    PlayedDate = round.PlayedDate
+                }).ToList();
 
-            var gameRoundResponse = new List<GameRoundResponse>();
-
-            foreach (var gameRound in gameSessionState.Rounds)
-            {
-                gameRoundResponse.Add(new()
-                {
-                    GameSessionId = gameRound.GameSessionId,
-                    PlayerOneChoice = gameRound.PlayerOneChoice.ToString().ToLower(),
-                    PlayerTwoChoice = gameRound.PlayerTwoChoice.ToString().ToLower(),
-                    Result = gameRound.Result.ToString(),
-                    PlayedDate = gameRound.PlayedDate
-                });
-            }
-
-            gameSessionsResponse.Add(new()
+            gameSessionsResponse.Add(new GameSessionResponse
             {
                 Id = gameSessionState.SessionId,
-                PlayerOne = username ?? "Anonymous player",
-                PlayerTwo = playerResponse?.Username ?? "Computer",
+                PlayerOne = Username.GetOrDefault(username),
+                PlayerTwo = Username.GetOrDefault(playerResponse?.Username, true),
                 GameType = gameSessionState.GameType.ToString(),
                 StartDate = gameSessionState.StartDate,
                 EndDate = gameSessionState.EndDate,
@@ -153,5 +123,33 @@ internal sealed record GetPlayHistoryHandler : IQueryHandler<GetPlayHistoryQuery
         }
 
         return gameSessionsResponse;
+    }
+
+    private async Task<PlayerResponse?> GetPlayerResponseAsync(Guid? otherPlayerId, Dictionary<Guid, PlayerResponse> playerDictionary)
+    {
+        if (!playerDictionary.TryGetValue(otherPlayerId ?? Guid.Empty, out var playerResponse) && otherPlayerId.HasValue)
+        {
+            const string sqlQuery = """
+                SELECT
+                    Id,
+                    Username,
+                    Email
+                FROM 
+                    Players
+                WHERE 
+                    Id = @Id
+                """;
+
+            using var connection = _sqlConnectionFactory.CreateConnection();
+
+            playerResponse = await connection.QuerySingleOrDefaultAsync<PlayerResponse?>(sqlQuery, new { Id = otherPlayerId });
+
+            if (playerResponse is not null)
+            {
+                playerDictionary[otherPlayerId.Value] = playerResponse;
+            }
+        }
+
+        return playerResponse;
     }
 }

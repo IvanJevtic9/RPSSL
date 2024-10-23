@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using RPSSL.Domain.Abstraction;
 
 namespace RPSSL.Domain.Exceptions;
 
-public sealed class RpsslApiException : Exception
+public sealed class RpsslApiException : BaseException
 {
     public RpsslApiException(string message, string? title = null, int? statusCodes = null) : base(message)
     {
@@ -15,7 +16,7 @@ public sealed class RpsslApiException : Exception
 
     public string? Title { get; }
 
-    public ProblemDetails ToProblemDetails() => new()
+    public override ProblemDetails ToProblemDetails() => new()
     {
         Title = Title,
         Status = HttpStatusCode,

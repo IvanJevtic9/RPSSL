@@ -5,7 +5,7 @@ public class Result
     public Result()
     { }
 
-    public Result(Exception exception)
+    public Result(BaseException exception)
     {
         Exception = exception;
     }
@@ -14,7 +14,7 @@ public class Result
 
     public bool IsSuccess => !IsFailure;
 
-    public Exception Exception { get; }
+    public BaseException Exception { get; }
 }
 
 public class Result<TValue> : Result
@@ -24,7 +24,7 @@ public class Result<TValue> : Result
         Value = value;
     }
 
-    public Result(Exception exception) : base(exception)
+    public Result(BaseException exception) : base(exception)
     { }
 
     public TValue Value { get; }

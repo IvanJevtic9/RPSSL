@@ -2,11 +2,9 @@ using RPSSL.Application;
 using RPSSL.Api.Extensions;
 using RPSSL.Infrastructure;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true) 
-    .AddEnvironmentVariables()
+builder.Configuration.AddAppConfigurations(builder.Environment)
     .Build();
 
 builder.Services.AddApplication();
@@ -17,7 +15,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

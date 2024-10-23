@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using RPSSL.Domain.GameFlow;
 using RPSSL.Application.GameFlow.Shared;
-using RPSSL.Application.Abstractions.Client;
+using RPSSL.Application.Abstractions.Clients;
 
 namespace RPSSL.Infrastructure.ExternalServices.RandomNumberClient;
 
@@ -25,4 +25,3 @@ public class RandomNumberApiClient : IRandomNumberApiClient
         return new ChoiceResponse((int)choiceEnum, choiceName);
     }
 }
-

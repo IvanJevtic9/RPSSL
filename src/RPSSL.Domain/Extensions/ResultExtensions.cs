@@ -1,7 +1,7 @@
 ﻿using RPSSL.Domain.Exceptions;
 using RPSSL.Domain.Abstraction;
 
-namespace RPSSL.Application.Extensions;
+namespace RPSSL.Domain.Extensions;
 
 public static class ResultExtensions
 {

@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using FluentValidation;
-using RPSSL.Domain.Abstraction;
-using RPSSL.Application.Extensions;
+using RPSSL.Domain.Extensions;
 using RPSSL.Domain.Exceptions;
+using RPSSL.Domain.Abstraction;
 using RPSSL.Application.Abstractions.Messaging;
 
 namespace RPSSL.Application.Abstractions.Behaviors;
@@ -18,10 +18,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
         _validators = validators;
     }
 
-    public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         if (!_validators.Any())
         {

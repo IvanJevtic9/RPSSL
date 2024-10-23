@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RPSSL.Infrastructure.Authentication;
 using RPSSL.Application.Abstractions.Data;
-using RPSSL.Application.Abstractions.Client;
+using RPSSL.Application.Abstractions.Clients;
 using Microsoft.Extensions.DependencyInjection;
 using RPSSL.Application.Abstractions.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -4,10 +4,13 @@ namespace RPSSL.Domain.GameFlow;
 
 public sealed class GameSession : Entity
 {
+    private const string ActiveStatus = "Active";
+    private const string FinishedStatus = "Finished";
+    private const string TerminatedStatus = "Terminated";
+
     private GameSession() { }
 
-    private GameSession(Guid? playerOneId, Guid? playerTwoId, GameType gameType = GameType.FirstTo1)
-        : base(Guid.NewGuid())
+    private GameSession(Guid? playerOneId, Guid? playerTwoId, GameType gameType = GameType.FirstTo1) : base(Guid.NewGuid())
     {
         GameType = gameType;
         PlayerOneId = playerOneId;
@@ -27,29 +30,16 @@ public sealed class GameSession : Entity
 
     public ICollection<GameRound> GameRounds { get; private set; } = [];
 
-    public static GameSession Create(Guid? playerOneId = null, Guid? playerTwoId = null, GameType gameType = GameType.FirstTo1) => new(playerOneId, playerTwoId, gameType);
+    public static GameSession Create(Guid? playerOneId = null, Guid? playerTwoId = null, GameType gameType = GameType.FirstTo1) =>
+         new(playerOneId, playerTwoId, gameType);
 
-    public override string ToString()
-    {
-        if (EndDate.HasValue)
-        {
-            return "Finished";
-        }
+    public bool IsFinished() => EndDate.HasValue;
 
-        if (DateTime.UtcNow - StartDate > TimeSpan.FromHours(1))
-        {
-            return "Abandoned";
-        }
-
-        return "Active";
-    }
+    public bool IsTerminated() => DateTime.UtcNow - StartDate > TimeSpan.FromHours(1);
 
     public GameRound PlayRound(Choice playerOneChoice, Choice playerTwoChoice)
     {
-        if (EndDate.HasValue)
-        {
-            throw new InvalidOperationException("Game session is already over.");
-        }
+        ValidateGameSession();
 
         var gameRound = GameRound.Create(Id, playerOneChoice, playerTwoChoice);
 
@@ -60,11 +50,39 @@ public sealed class GameSession : Entity
 
     public void CompleteSession()
     {
-        if (EndDate.HasValue)
+        if (IsFinished())
         {
             throw new InvalidOperationException("Game session is already over.");
         }
 
         EndDate = DateTime.Now;
+    }
+
+    public override string ToString()
+    {
+        if (IsFinished())
+        {
+            return FinishedStatus;
+        }
+
+        if (IsTerminated())
+        {
+            return TerminatedStatus;
+        }
+
+        return ActiveStatus;
+    }
+
+    private void ValidateGameSession()
+    {
+        if (IsFinished())
+        {
+            throw new InvalidOperationException("Game session is already over.");
+        }
+
+        if (IsTerminated())
+        {
+            throw new InvalidOperationException("Game session is terminated.");
+        }
     }
 }

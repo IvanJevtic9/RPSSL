@@ -3,7 +3,7 @@ using RPSSL.Domain.Abstraction;
 using Microsoft.AspNetCore.Http;
 using RPSSL.Application.Extensions;
 using RPSSL.Application.GameFlow.Shared;
-using RPSSL.Application.Abstractions.Client;
+using RPSSL.Application.Abstractions.Clients;
 using RPSSL.Application.Abstractions.Service;
 using RPSSL.Application.Abstractions.Messaging;
 

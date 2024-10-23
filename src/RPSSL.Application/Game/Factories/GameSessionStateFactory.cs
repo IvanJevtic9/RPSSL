@@ -6,11 +6,11 @@ internal static class GameSessionStateFactory
 {
     public static GameSessionState ToModel(GameSession gameSession)
     {
-        if (gameSession.EndDate.HasValue)
+        return gameSession switch
         {
-            return new OverGameSession(gameSession);
-        }
-
-        return new LiveGameSession(gameSession);
+            _ when gameSession.IsTerminated() => new TerminatedSession(gameSession),
+            _ when gameSession.IsFinished() => new OverGameSession(gameSession),
+            _ => new LiveGameSession(gameSession)
+        };
     }
 }

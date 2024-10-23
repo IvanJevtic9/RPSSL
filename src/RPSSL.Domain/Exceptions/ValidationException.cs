@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using RPSSL.Domain.Abstraction;
+using Microsoft.AspNetCore.Http;
 
 namespace RPSSL.Domain.Exceptions;
 
 public sealed record ValidationError(string PropertyName, string ErrorMessage);
 
-public sealed class ValidationException : Exception
+public sealed class ValidationException : BaseException
 {
     public ValidationException(IEnumerable<ValidationError> validationErrors)
     {
@@ -14,7 +15,7 @@ public sealed class ValidationException : Exception
 
     public IEnumerable<ValidationError> Errors { get; }
 
-    public ProblemDetails ToProblemDetails()
+    public override ProblemDetails ToProblemDetails()
     {
         var problemDetails = new ProblemDetails()
         {

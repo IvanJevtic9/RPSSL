@@ -67,6 +67,11 @@ internal sealed class LiveGameSession : GameSessionState
 
     public GameSessionState PlayRound(Choice playerOneChoice, Choice playerTwoChoice)
     {
+        if (Representation.IsTerminated())
+        {
+            return new TerminatedSession(Representation, [.. RoundStates]);
+        }
+
         var gameRound = Representation.PlayRound(playerOneChoice, playerTwoChoice);
 
         RoundStates.Add(GameRoundStateFactory.ToModel(gameRound));
@@ -87,6 +92,15 @@ internal sealed class LiveGameSession : GameSessionState
 internal sealed class OverGameSession : GameSessionState
 {
     public OverGameSession(GameSession representation, List<GameRoundState>? gameRoundStates = null)
+        : base(representation, gameRoundStates)
+    { }
+
+    public override bool IsLive => false;
+}
+
+internal sealed class TerminatedSession : GameSessionState
+{
+    public TerminatedSession(GameSession representation, List<GameRoundState>? gameRoundStates = null)
         : base(representation, gameRoundStates)
     { }
 

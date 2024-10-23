@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using RPSSL.Application.GameFlow.PlayRoundAgainstComputer;
 
-namespace RPSSL.Application.Players.LogInPlayer;
+namespace RPSSL.Application.GameFlow.PlayRoundAgainstComputer;
 
 internal sealed class PlayRoundAgainstComputerCommandValidator : AbstractValidator<PlayRoundAgainstComputerCommand>
 {

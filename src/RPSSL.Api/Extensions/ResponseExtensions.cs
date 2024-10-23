@@ -14,7 +14,7 @@ internal static class ResponseExtensions
             : HandleErrorResponse(response.Exception);
     }
 
-    private static ErrorObjectResult HandleErrorResponse(Exception exception)
+    private static ErrorObjectResult HandleErrorResponse(BaseException exception)
     {
         var problemDetails = exception switch
         {
