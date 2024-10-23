@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution files", "solution files", "{AE92AB42-C881-4C17-AF33-FF0206D7AD5C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{354E0F02-6533-4B1A-85EE-49B7E36A60D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPSSL.Api", "src\RPSSL.Api\RPSSL.Api.csproj", "{3BF2009C-8703-4CCE-8EAC-92887B0AF71F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPSSL.Application", "src\RPSSL.Application\RPSSL.Application.csproj", "{83198B7F-E5C2-4662-9653-135F19307918}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPSSL.Domain", "src\RPSSL.Domain\RPSSL.Domain.csproj", "{CED283AB-D8BF-4039-8DCB-AB75953E0559}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RPSSL.Infrastructure", "src\RPSSL.Infrastructure\RPSSL.Infrastructure.csproj", "{3AEDA783-3CAB-4896-8C60-702970BEF3DD}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BF2009C-8703-4CCE-8EAC-92887B0AF71F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF2009C-8703-4CCE-8EAC-92887B0AF71F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF2009C-8703-4CCE-8EAC-92887B0AF71F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF2009C-8703-4CCE-8EAC-92887B0AF71F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83198B7F-E5C2-4662-9653-135F19307918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83198B7F-E5C2-4662-9653-135F19307918}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83198B7F-E5C2-4662-9653-135F19307918}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83198B7F-E5C2-4662-9653-135F19307918}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED283AB-D8BF-4039-8DCB-AB75953E0559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED283AB-D8BF-4039-8DCB-AB75953E0559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED283AB-D8BF-4039-8DCB-AB75953E0559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED283AB-D8BF-4039-8DCB-AB75953E0559}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AEDA783-3CAB-4896-8C60-702970BEF3DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AEDA783-3CAB-4896-8C60-702970BEF3DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AEDA783-3CAB-4896-8C60-702970BEF3DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AEDA783-3CAB-4896-8C60-702970BEF3DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1CF737C-ACF3-4C32-8D37-F42A8B49CC55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3BF2009C-8703-4CCE-8EAC-92887B0AF71F} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
+		{83198B7F-E5C2-4662-9653-135F19307918} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
+		{CED283AB-D8BF-4039-8DCB-AB75953E0559} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
+		{3AEDA783-3CAB-4896-8C60-702970BEF3DD} = {2F6226AE-F786-454C-97F7-CC0CB2F1C6A7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BBF1443A-5764-42BD-AAB8-699911ED0C25}
+	EndGlobalSection
+EndGlobal

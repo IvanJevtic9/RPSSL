@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  rpssl.api:
+    image: ${DOCKER_REGISTRY-}rpsslapi
+    container_name: rpsslapi
+    build:
+      context: .
+      dockerfile: src/RPSSL.Api/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=RPSSLDb;User=sa;Password=2Secure*Password2;
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      MSSQL_SA_PASSWORD: "2Secure*Password2"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - rpssl-network
+    volumes:              
+      - sqlserver_data:/var/opt/mssql
+
+networks:
+  rpssl-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
