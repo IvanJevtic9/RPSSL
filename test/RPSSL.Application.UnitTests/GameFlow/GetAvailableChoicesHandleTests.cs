@@ -11,7 +11,6 @@ public class GetAvailableChoicesHandlerTests
 
     public GetAvailableChoicesHandlerTests()
     {
-        // Initialize the handler
         _handler = new GetAvailableChoicesHandler();
     }
 
