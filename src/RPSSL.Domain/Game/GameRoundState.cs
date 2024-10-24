@@ -1,8 +1,9 @@
 ﻿using RPSSL.Domain.GameFlow;
+using static RPSSL.Domain.Constants;
 
-namespace RPSSL.Application.Game.Factories;
+namespace RPSSL.Domain.Game;
 
-internal abstract class GameRoundState
+public abstract class GameRoundState
 {
     protected GameRoundState(GameRound representation) => Representation = representation;
 
@@ -22,28 +23,28 @@ internal abstract class GameRoundState
     {
         return Result switch
         {
-            GameResult.Tie => Constants.GameOutcome.Tie,
-            GameResult.PlayerOneWon when isCurrentPlayerOne => Constants.GameOutcome.Win,
-            _ => Constants.GameOutcome.Lost,
+            GameResult.Tie => GameOutcome.Tie,
+            GameResult.PlayerOneWon when isCurrentPlayerOne => GameOutcome.Win,
+            _ => GameOutcome.Lost,
         };
     }
 }
 
-internal sealed class PlayerOneWonGameRound : GameRoundState
+public sealed class PlayerOneWonGameRound : GameRoundState
 {
     public PlayerOneWonGameRound(GameRound representation) : base(representation) { }
 
     public override GameResult Result => GameResult.PlayerOneWon;
 }
 
-internal sealed class PlayerTwoWonGameRound : GameRoundState
+public sealed class PlayerTwoWonGameRound : GameRoundState
 {
     public PlayerTwoWonGameRound(GameRound representation) : base(representation) { }
 
     public override GameResult Result => GameResult.PlayerTwoWon;
 }
 
-internal sealed class TiedGameRound : GameRoundState
+public sealed class TiedGameRound : GameRoundState
 {
     public TiedGameRound(GameRound representation) : base(representation) { }
 

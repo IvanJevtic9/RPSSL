@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using RPSSL.Domain.Players;
-using RPSSL.Application.Game;
+using RPSSL.Application.Services;
 using Microsoft.AspNetCore.Identity;
 using RPSSL.Application.Abstractions.Service;
 using Microsoft.Extensions.DependencyInjection;

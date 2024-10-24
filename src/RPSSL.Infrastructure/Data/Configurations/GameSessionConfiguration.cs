@@ -2,6 +2,7 @@
 using RPSSL.Domain.GameFlow;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static RPSSL.Infrastructure.Constants;
 
 namespace RPSSL.Infrastructure.Data.Configurations;
 
@@ -9,7 +10,7 @@ internal sealed class GameSessionConfiguration : IEntityTypeConfiguration<GameSe
 {
     public void Configure(EntityTypeBuilder<GameSession> builder)
     {
-        builder.ToTable("GameSessions");
+        builder.ToTable(Database.GameSessionTable, Database.GameScheme);
 
         builder.HasKey(gameSession => gameSession.Id);
 
@@ -22,5 +23,13 @@ internal sealed class GameSessionConfiguration : IEntityTypeConfiguration<GameSe
             .WithMany()
             .HasForeignKey(gameSession => gameSession.PlayerTwoId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.OwnsMany(x => x.Rounds, x =>
+        {
+            x.ToTable(Database.GameRoundTable, Database.GameScheme);
+            x.HasKey(x => x.Id);
+            x.WithOwner().HasForeignKey(x => x.GameSessionId);
+        }).Metadata
+        .SetPropertyAccessMode(PropertyAccessMode.Property);
     }
 }

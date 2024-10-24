@@ -1,8 +1,8 @@
 ﻿using RPSSL.Domain.GameFlow;
 
-namespace RPSSL.Application.Game.Factories;
+namespace RPSSL.Domain.Game;
 
-internal abstract class GameSessionState
+public abstract class GameSessionState
 {
     protected GameSessionState(GameSession representation, List<GameRoundState>? gameRoundStates = null)
     {
@@ -52,7 +52,7 @@ internal abstract class GameSessionState
     public abstract bool IsLive { get; }
 }
 
-internal sealed class LiveGameSession : GameSessionState
+public sealed class LiveGameSession : GameSessionState
 {
     private static readonly Dictionary<GameType, int> _roundsToWinByGameType = new()
     {
@@ -89,7 +89,7 @@ internal sealed class LiveGameSession : GameSessionState
     public override bool IsLive => true;
 }
 
-internal sealed class OverGameSession : GameSessionState
+public sealed class OverGameSession : GameSessionState
 {
     public OverGameSession(GameSession representation, List<GameRoundState>? gameRoundStates = null)
         : base(representation, gameRoundStates)
@@ -98,7 +98,7 @@ internal sealed class OverGameSession : GameSessionState
     public override bool IsLive => false;
 }
 
-internal sealed class TerminatedSession : GameSessionState
+public sealed class TerminatedSession : GameSessionState
 {
     public TerminatedSession(GameSession representation, List<GameRoundState>? gameRoundStates = null)
         : base(representation, gameRoundStates)

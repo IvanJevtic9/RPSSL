@@ -12,7 +12,7 @@ using RPSSL.Infrastructure.Data;
 namespace RPSSL.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241023020345_InitialMigration")]
+    [Migration("20241024224955_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,31 +24,6 @@ namespace RPSSL.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("RPSSL.Domain.GameFlow.GameRound", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("GameSessionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("PlayedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PlayerOneChoice")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerTwoChoice")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameSessionId");
-
-                    b.ToTable("GameRounds", (string)null);
-                });
 
             modelBuilder.Entity("RPSSL.Domain.GameFlow.GameSession", b =>
                 {
@@ -77,7 +52,7 @@ namespace RPSSL.Infrastructure.Migrations
 
                     b.HasIndex("PlayerTwoId");
 
-                    b.ToTable("GameSessions", (string)null);
+                    b.ToTable("GameSessions", "Game");
                 });
 
             modelBuilder.Entity("RPSSL.Domain.Players.Player", b =>
@@ -108,16 +83,7 @@ namespace RPSSL.Infrastructure.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Players", (string)null);
-                });
-
-            modelBuilder.Entity("RPSSL.Domain.GameFlow.GameRound", b =>
-                {
-                    b.HasOne("RPSSL.Domain.GameFlow.GameSession", null)
-                        .WithMany("GameRounds")
-                        .HasForeignKey("GameSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Players", "Identity");
                 });
 
             modelBuilder.Entity("RPSSL.Domain.GameFlow.GameSession", b =>
@@ -131,11 +97,36 @@ namespace RPSSL.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("PlayerTwoId")
                         .OnDelete(DeleteBehavior.NoAction);
-                });
 
-            modelBuilder.Entity("RPSSL.Domain.GameFlow.GameSession", b =>
-                {
-                    b.Navigation("GameRounds");
+                    b.OwnsMany("RPSSL.Domain.GameFlow.GameRound", "Rounds", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("GameSessionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("PlayedDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<int>("PlayerOneChoice")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("PlayerTwoChoice")
+                                .HasColumnType("int");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("GameSessionId");
+
+                            b1.ToTable("GameRounds", "Game");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GameSessionId");
+                        });
+
+                    b.Navigation("Rounds");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,8 @@
 ﻿using RPSSL.Domain.GameFlow;
 
-namespace RPSSL.Application.Game.Factories;
+namespace RPSSL.Domain.Game;
 
-internal static class GameSessionStateFactory
+public static class GameSessionStateFactory
 {
     public static GameSessionState ToModel(GameSession gameSession)
     {

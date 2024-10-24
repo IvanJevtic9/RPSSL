@@ -1,13 +1,10 @@
 ﻿using RPSSL.Domain.Abstraction;
+using static RPSSL.Domain.Constants;
 
 namespace RPSSL.Domain.GameFlow;
 
 public sealed class GameSession : Entity
 {
-    private const string ActiveStatus = "Active";
-    private const string FinishedStatus = "Finished";
-    private const string TerminatedStatus = "Terminated";
-
     private GameSession() { }
 
     private GameSession(Guid? playerOneId, Guid? playerTwoId, GameType gameType = GameType.FirstTo1) : base(Guid.NewGuid())
@@ -28,16 +25,33 @@ public sealed class GameSession : Entity
 
     public DateTime? EndDate { get; private set; }
 
-    public ICollection<GameRound> GameRounds { get; private set; } = [];
+    internal ICollection<GameRound> GameRounds { get; private set; } = [];
+
+    public IReadOnlyCollection<GameRound> Rounds => (IReadOnlyCollection<GameRound>)GameRounds;
 
     public static GameSession Create(Guid? playerOneId = null, Guid? playerTwoId = null, GameType gameType = GameType.FirstTo1) =>
-         new(playerOneId, playerTwoId, gameType);
+        new(playerOneId, playerTwoId, gameType);
 
     public bool IsFinished() => EndDate.HasValue;
 
     public bool IsTerminated() => DateTime.UtcNow - StartDate > TimeSpan.FromHours(1);
 
-    public GameRound PlayRound(Choice playerOneChoice, Choice playerTwoChoice)
+    public override string ToString()
+    {
+        if (IsFinished())
+        {
+            return GameSessionStatus.FinishedStatus;
+        }
+
+        if (IsTerminated())
+        {
+            return GameSessionStatus.TerminatedStatus;
+        }
+
+        return GameSessionStatus.ActiveStatus;
+    }
+
+    internal GameRound PlayRound(Choice playerOneChoice, Choice playerTwoChoice)
     {
         ValidateGameSession();
 
@@ -48,7 +62,7 @@ public sealed class GameSession : Entity
         return gameRound;
     }
 
-    public void CompleteSession()
+    internal void CompleteSession()
     {
         if (IsFinished())
         {
@@ -56,21 +70,6 @@ public sealed class GameSession : Entity
         }
 
         EndDate = DateTime.Now;
-    }
-
-    public override string ToString()
-    {
-        if (IsFinished())
-        {
-            return FinishedStatus;
-        }
-
-        if (IsTerminated())
-        {
-            return TerminatedStatus;
-        }
-
-        return ActiveStatus;
     }
 
     private void ValidateGameSession()

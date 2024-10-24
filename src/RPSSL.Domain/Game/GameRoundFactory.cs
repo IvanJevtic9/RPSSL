@@ -1,8 +1,8 @@
 ﻿using RPSSL.Domain.GameFlow;
 
-namespace RPSSL.Application.Game.Factories;
+namespace RPSSL.Domain.Game;
 
-internal static class GameRoundStateFactory
+public static class GameRoundStateFactory
 {
     private static readonly Dictionary<Choice, IReadOnlyList<Choice>> _winningChoices = new()
     {

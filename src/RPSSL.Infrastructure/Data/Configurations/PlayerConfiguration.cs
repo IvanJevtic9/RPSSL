@@ -1,6 +1,7 @@
 ﻿using RPSSL.Domain.Players;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static RPSSL.Infrastructure.Constants;
 
 namespace RPSSL.Infrastructure.Data.Configurations;
 
@@ -8,7 +9,7 @@ internal sealed class PlayerConfiguration : IEntityTypeConfiguration<Player>
 {
     public void Configure(EntityTypeBuilder<Player> builder)
     {
-        builder.ToTable("Players");
+        builder.ToTable(Database.PlayerTable, Database.IdentityScheme);
 
         builder.HasKey(player => player.Id);
 

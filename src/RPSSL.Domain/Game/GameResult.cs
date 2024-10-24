@@ -1,4 +1,4 @@
-﻿namespace RPSSL.Application.Game.Factories;
+﻿namespace RPSSL.Domain.Game;
 
 public enum GameResult
 {

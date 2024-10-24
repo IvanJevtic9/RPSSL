@@ -1,10 +1,10 @@
-﻿using RPSSL.Domain.GameFlow;
-using RPSSL.Application.Game.Factories;
+﻿using RPSSL.Domain.Game;
+using RPSSL.Domain.GameFlow;
 using RPSSL.Application.GameFlow.Shared;
 using RPSSL.Application.Abstractions.Data;
 using RPSSL.Application.Abstractions.Service;
 
-namespace RPSSL.Application.Game;
+namespace RPSSL.Application.Services;
 
 internal sealed class GameService : IGameService
 {

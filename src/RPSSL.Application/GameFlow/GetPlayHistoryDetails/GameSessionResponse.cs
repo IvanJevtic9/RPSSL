@@ -27,8 +27,6 @@ public sealed class GameSessionResponse
 
 public sealed class GameRoundResponse
 {
-    public Guid GameSessionId { get; init; }
-
     public string PlayerOneChoice { get; init; }
 
     public string PlayerTwoChoice { get; init; }
