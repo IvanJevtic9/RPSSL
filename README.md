@@ -47,8 +47,8 @@ This solution follows a **Clean Architecture** approach with clear separation be
 - Future features: SignalR for real-time multiplayer games and session persistence.
 
 ### **2. Player Statistics**
-- Track player history including total wins, losses, ties, and winning percentages.
 - Query past game sessions with detailed round-by-round results.
+- Feature features: Track player history including total wins, losses, ties, and winning percentages.
 
 ---
 
